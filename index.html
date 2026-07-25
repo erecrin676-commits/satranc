@@ -1,3 +1,5 @@
+
+
 <!doctype html>
 <html lang="tr">
 <head>
@@ -14,7 +16,7 @@
     button:active{transform:scale(.96)}
     button:disabled{opacity:.45}
     .app{height:100%;display:flex;flex-direction:column;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 10px calc(8px + env(safe-area-inset-bottom));align-items:center}
-    .bar,.chips,.timers,.captured,.history,.mission-strip,.eval-wrap,.opening-banner{width:100%;max-width:560px}
+    .bar,.chips,.timers,.captured,.history,.mission-strip,.eval-wrap,.opening-banner{width:100%;max-width:640px}
     .bar{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:8px 11px;box-shadow:0 10px 28px rgba(0,0,0,.35)}
     .player-head{display:flex;align-items:center;gap:9px;min-width:0}
     .avatar{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#5b8cff,#b46bff);font-size:20px}
@@ -42,7 +44,7 @@
     .opening-banner{background:rgba(91,140,255,.12);border:1px solid rgba(91,140,255,.3);border-radius:10px;padding:4px 10px;font-size:12px;font-weight:700;color:#9ab8ff;text-align:center;display:none}
     .opening-banner.show{display:block}
     .boardWrap{flex:1;min-height:0;width:100%;display:grid;place-items:center;position:relative}
-    .board{width:min(calc(100vw - 20px),calc(100vh - 280px),540px);aspect-ratio:1;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);overflow:hidden;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.1)}
+    .board{width:min(calc(100vw - 20px),calc(100vh - 240px),620px);aspect-ratio:1;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);overflow:hidden;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.1);container-type:size}
     .sq{position:relative;display:grid;place-items:center;font-size:clamp(26px,10vw,56px);line-height:1;cursor:pointer}
     .sq.light{background:var(--light)}.sq.dark{background:var(--dark)}
     /* blind mode */
@@ -152,7 +154,7 @@
     @keyframes movePop{from{transform:scale(1.18)}to{transform:scale(1)}}
     @keyframes capturePop{50%{transform:scale(1.06);filter:saturate(1.5)}}
     @media(max-width:380px){.opts.five{grid-template-columns:repeat(3,1fr)}.tabs{grid-template-columns:repeat(3,1fr)}}
-    @media(orientation:landscape) and (max-height:520px){.app{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto auto auto auto 1fr;align-items:start}.boardWrap{grid-row:1/7}.board{width:min(calc(100vh - 20px),420px)}.bar,.chips,.timers,.captured,.history,.mission-strip,.eval-wrap,.opening-banner,.replay-bar{max-width:none}.chips{grid-template-columns:repeat(2,1fr)}}
+    @media(orientation:landscape) and (max-height:520px){.app{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto auto auto auto 1fr;align-items:start}.boardWrap{grid-row:1/7}.board{width:min(calc(100vh - 20px),480px)}.bar,.chips,.timers,.captured,.history,.mission-strip,.eval-wrap,.opening-banner,.replay-bar{max-width:none}.chips{grid-template-columns:repeat(2,1fr)}}
   </style>
 </head>
 <body>
@@ -239,7 +241,7 @@
         <button class="opt on" data-val="white">♔ Beyaz</button>
         <button class="opt" data-val="black">♚ Siyah</button>
       </div>
-      <h2 id="diffTitle">AI zorluk &amp; kişilik</h2>
+      <h2 id="diffTitle">AI zorluk & kişilik</h2>
       <div class="opts three" id="diffOpts" data-key="difficulty">
         <button class="opt" data-val="easy">Kolay</button>
         <button class="opt on" data-val="medium">Orta</button>
@@ -269,7 +271,7 @@
         <input id="fenInput" placeholder="FEN kodu yapıştır..." spellcheck="false">
         <button id="fenLoad" style="min-height:38px;font-size:12px">Yükle</button>
       </div>
-      <h2>Tema &amp; görsel</h2>
+      <h2>Tema & görsel</h2>
       <div class="opts five" id="themeOpts" data-key="theme"></div>
       <div class="color-pickers">
         <label>Açık <input type="color" id="lightColor" value="#eed7b3"></label>
@@ -734,18 +736,18 @@
   function renderLeader(){
     let arr=[...profile.leader].sort((a,b)=>b.elo-a.elo).slice(0,8);
     if(!arr.length)arr=[{name:profile.name,avatar:profile.avatar,elo:profile.elo,result:"Şu an"}];
-    $("#leaderList").innerHTML=arr.map((x,i)=>`<div class="leader"><b>${i+1}</b><div><b>${x.avatar||"♟"} ${x.name}</b><small>${x.result||"Maç"} • ${x.date||today()}</small></div><b>${x.elo}</b></div>`).join("")
-  }
-  function renderUnlocks(){
-    $("#unlockList").innerHTML=Object.entries(THEMES).map(([id,th])=>`<div class="leader"><span style="width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,${th.light},${th.dark})"></span><div><b>${th.name}</b><small>${profile.unlocked.includes(id)?"Açık":"Kilitli"}</small></div><b>${profile.unlocked.includes(id)?"✓":"🔒"}</b></div>`).join("")
+    $("#leaderList").innerHTML=arr.map((x,i)=>`<div class="leader"><span>${i<3?["🥇","🥈","🥉"][i]:""}${x.avatar}</span><div><b>${x.name}</b><small>${x.result} • ${x.date||today()}</small></div><b>${x.elo}</b></div>`).join("")
   }
   function renderBadges(){
-    $("#badgeGrid").innerHTML=BADGE_DEFS.map(b=>{let earned=(profile.badges||[]).includes(b.id);return`<div class="badge ${earned?"earned":""}"><span class="badge-icon">${b.icon}</span>${b.name}</div>`}).join("")
+    $("#badgeGrid").innerHTML=BADGE_DEFS.map(b=>`<div class="badge ${(profile.badges||[]).includes(b.id)?"earned":""}"><span class="badge-icon">${b.icon}</span>${b.name}</div>`).join("")
   }
   function renderMatchHistory(){
-    let h=(profile.matchHistory||[]).slice(-15).reverse();
-    if(!h.length){$("#matchHistoryList").innerHTML="<div style='color:#aeb7cc;font-size:13px;padding:8px'>Henüz maç yok</div>";return}
-    $("#matchHistoryList").innerHTML=h.map(m=>{let icon=m.result==="Galibiyet"?"🏆":m.result==="Mağlubiyet"?"💔":"🤝";let cls=m.result==="Galibiyet"?"elo-up":m.result==="Mağlubiyet"?"elo-dn":"elo-eq";return`<div class="history-item"><span class="res">${icon}</span><div class="info"><b>${m.result}</b><small>${m.mode} • ${m.date} • ${m.moves} hamle</small></div><span class="elo-delta ${cls}">${m.delta>0?"+":""}${m.delta}</span></div>`}).join("")
+    let hist=(profile.matchHistory||[]).slice().reverse();
+    $("#matchHistoryList").innerHTML=hist.map(h=>`<div class="history-item"><span class="res">${h.result==="Galibiyet"?"🏆":h.result==="Mağlubiyet"?"💔":"⚖"}</span><div class="info"><b>${h.result}</b><small>${h.mode} • ${h.moves} hamle</small></div><span class="${h.delta>0?"elo-up":h.delta<0?"elo-dn":"elo-eq"}">${h.delta>0?"+":""}${h.delta}</span></div>`).join("")||"<div style='text-align:center;color:#aeb7cc;font-size:12px'>Henüz maç yok</div>"
+  }
+  function renderUnlocks(){
+    let locked=Object.keys(THEMES).filter(k=>!profile.unlocked.includes(k)&&k!=="custom");
+    $("#unlockList").innerHTML=locked.length?locked.map(k=>`<div class="item"><span>🔒</span><div><b>${THEMES[k].name}</b><small>Ödülle açılır</small></div></div>`).join(""):"<div style='text-align:center;color:#aeb7cc;font-size:12px'>Tüm temalar açık</div>"
   }
   function renderThemeButtons(){
     $("#themeOpts").innerHTML=Object.entries(THEMES).map(([id,th])=>`<button class="opt ${settings.theme===id?"on":""} ${profile.unlocked.includes(id)?"":"locked"}" data-val="${id}">${th.name}${profile.unlocked.includes(id)?"":" 🔒"}</button>`).join("")
@@ -832,8 +834,8 @@
     if(st.over){state.over=st;return finish(st)}
     if(settings.mode==="ai"&&state.turn!==player){
       busy=true;
-      setTimeout(()=>{
-        let am=aiMove();busy=false;
+      setTimeout(async ()=>{
+        let am=await window.__sfBest().catch(()=>null)||aiMove();busy=false;
         if(am){
           // AI comment on its own move
           if(am.cap)showAiBubble("cap");
@@ -887,6 +889,7 @@
     let title=st.result==="draw"?"Berabere":(st.result==="white"?"Beyaz":"Siyah")+" kazandı";
     let blunders=moveQualities.filter(q=>q==="blunder").length,mistakes=moveQualities.filter(q=>q==="mistake").length,brilliant=moveQualities.filter(q=>q==="brilliant").length;
     heatmapData=buildHeatmap();
+    try{var _pcol=settings.color==="white"?"white":"black";var _res=st.result==="draw"?"draw":(st.result===_pcol?"win":"loss");parent.postMessage({type:"chessGameEnd",result:_res,moves:state.n,difficulty:settings.difficulty,mode:settings.mode},"*")}catch(_e){}
     showAnalysis(title,st.reason,{moves:state.n,caps:(settings.color==="white"?state.wCaps.length:state.bCaps.length),best:suggestBestMove(),elo:(delta>0?"+":"")+delta,tasks:taskMsgs,blunders,mistakes,brilliant,critIdx})
   }
   function completeTasks(won){
@@ -1074,6 +1077,74 @@
   state=initialState(startFEN);
   toggleModeOptions();render();save();
   window.addEventListener("resize",()=>{syncArrowCanvas();renderBoard()});
+// ---- Lovable additions: Stockfish + PWA host bridge ----
+(function(){
+  var sfReady=false, sfWorker=null, sfQueue=[];
+  function initSF(){
+    try{
+      sfWorker=new Worker("https://cdn.jsdelivr.net/npm/stockfish@11.0.0/stockfish.js");
+      sfWorker.onmessage=function(e){
+        var line=typeof e.data==='string'?e.data:(e.data&&e.data.data)||'';
+        if(line==='readyok'||line==='uciok'){sfReady=true;return}
+        var m=/^bestmove\s+(\S+)/.exec(line);
+        if(m&&sfQueue.length){var cb=sfQueue.shift();cb(m[1])}
+      };
+      sfWorker.postMessage("uci");
+      sfWorker.postMessage("isready");
+    }catch(e){console.warn("Stockfish yüklenemedi",e)}
+  }
+  initSF();
+  // Convert current state->FEN, ask stockfish, then convert bestmove back to internal move
+  window.__sfBest=function(){
+    return new Promise(function(resolve,reject){
+      if(!sfWorker||!sfReady||typeof state==='undefined'||!state){return reject()}
+      if(settings.difficulty!=='hard'){return reject()}
+      // Build FEN from current state
+      var fenParts=[];
+      for(var r=0;r<8;r++){var row="",empty=0;for(var col=0;col<8;col++){var p=state.b[r][col];if(p){if(empty)row+=empty;empty=0;var mp={wK:"K",wQ:"Q",wR:"R",wB:"B",wN:"N",wP:"P",bK:"k",bQ:"q",bR:"r",bB:"b",bN:"n",bP:"p"};row+=mp[p]||"?"}else empty++}if(empty)row+=empty;fenParts.push(row)}
+      var fen=fenParts.join("/")+" "+state.turn+" KQkq - 0 "+Math.max(1,state.n);
+      var timeout=setTimeout(function(){reject()},2500);
+      sfQueue.push(function(uci){
+        clearTimeout(timeout);
+        // uci like e2e4 or e7e8q
+        try{
+          var files="abcdefgh";
+          var fc=files.indexOf(uci[0]),fr=8-parseInt(uci[1],10);
+          var tc=files.indexOf(uci[2]),tr=8-parseInt(uci[3],10);
+          var prom=uci[4]?uci[4].toUpperCase():null;
+          var moves=legal(state,state.turn);
+          var match=moves.find(function(m){return m.fr[0]===fr&&m.fr[1]===fc&&m.to[0]===tr&&m.to[1]===tc&&(!prom||m.prom===prom)});
+          if(match){resolve(match)}else{reject()}
+        }catch(e){reject()}
+      });
+      sfWorker.postMessage("position fen "+fen);
+      var depth=settings.difficulty==='hard'?12:6;
+      sfWorker.postMessage("go depth "+depth);
+    });
+  };
+
+  // Notify parent (React shell) about game end for leaderboard
+  var _origFinish=typeof finish==='function'?finish:null;
+  if(_origFinish){
+    window.finish=function(st){
+      var r=_origFinish(st);
+      try{
+        var player=settings.color==="white"?"white":"black";
+        var outcome=st.result==="draw"?"draw":(st.result===player?"win":"loss");
+        parent.postMessage({type:"chessGameEnd",result:outcome,moves:state.n,difficulty:settings.difficulty,mode:settings.mode},"*");
+      }catch(e){}
+      return r;
+    };
+    // Rewire the reference inside the IIFE by hooking status().over checks: easier — re-declare finish global
+  }
+
+  // Accept language message from host
+  window.addEventListener("message",function(e){
+    if(e.data&&e.data.type==="setLang"){
+      document.documentElement.lang=e.data.lang||"tr";
+    }
+  });
+})();
 })();
 </script>
 </body>
